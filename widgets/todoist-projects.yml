@@ -24,8 +24,8 @@
       headers:
         Authorization: Bearer ${TODOIST_API_TOKEN}
   template: |
-    {{ $projects := .JSON.Array "." }}
-    {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
+    {{ $projects := .JSON.Array "results" }}
+    {{ $tasks := (.Subrequest "tasks").JSON.Array "results" }}
     {{ if eq (len $projects) 0 }}
       <p class="color-subdue size-h5" style="padding:4px 0">No projects found.</p>
     {{ else }}
@@ -35,7 +35,7 @@
       {{ $name := .String "name" }}
       {{ $count := 0 }}
       {{ range $tasks }}
-        {{ if eq (.String "project_id") $pid }}
+        {{ if eq (.String "projectId") $pid }}
           {{ $count = add $count 1 }}
         {{ end }}
       {{ end }}
@@ -67,7 +67,7 @@
 #   headers:
 #     Authorization: Bearer ${TODOIST_API_TOKEN}
 #   template: |
-#     {{ $projects := .JSON.Array "." }}
+#     {{ $projects := .JSON.Array "results" }}
 #     {{ if eq (len $projects) 0 }}
 #       <p class="color-subdue size-h5" style="padding:4px 0">No projects found.</p>
 #     {{ else }}

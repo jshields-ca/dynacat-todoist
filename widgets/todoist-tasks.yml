@@ -24,11 +24,8 @@
   url: https://api.todoist.com/api/v1/tasks
   headers:
     Authorization: Bearer ${TODOIST_API_TOKEN}
-  parameters:
-    sorted_by: priority
-    sort_order: asc
   template: |
-    {{ $tasks := .JSON.Array "." }}
+    {{ $tasks := .JSON.Array "results" }}
     {{ if eq (len $tasks) 0 }}
       <p class="color-subdue size-h5" style="padding:4px 0">Inbox zero — you're all caught up!</p>
     {{ else }}
@@ -71,7 +68,7 @@
 #     sorted_by: due_date
 #     sort_order: asc
 #   template: |
-#     {{ $tasks := .JSON.Array "." }}
+#     {{ $tasks := .JSON.Array "results" }}
 #     {{ if eq (len $tasks) 0 }}
 #       <p class="color-subdue size-h5" style="padding:4px 0">No tasks in this project.</p>
 #     {{ else }}
@@ -112,7 +109,7 @@
 #     sorted_by: due_date
 #     sort_order: asc
 #   template: |
-#     {{ $tasks := .JSON.Array "." }}
+#     {{ $tasks := .JSON.Array "results" }}
 #     {{ if eq (len $tasks) 0 }}
 #       <p class="color-subdue size-h5" style="padding:4px 0">No tasks — inbox zero!</p>
 #     {{ else }}

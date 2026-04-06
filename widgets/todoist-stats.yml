@@ -31,7 +31,7 @@
       headers:
         Authorization: Bearer ${TODOIST_API_TOKEN}
   template: |
-    {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
+    {{ $tasks := (.Subrequest "tasks").JSON.Array "results" }}
 
     <div style="display:flex;flex-direction:column;gap:8px">
 
