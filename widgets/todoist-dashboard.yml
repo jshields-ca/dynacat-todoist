@@ -46,11 +46,8 @@
       {{ end }}
     {{ end }}
 
-    {{/* ── Pre-compute: does any task have labels? ────────────────── */}}
-    {{ $hasLabels := false }}
-    {{ range $tasks }}
-      {{ if gt (len (.Array "labels")) 0 }}{{ $hasLabels = true }}{{ end }}
-    {{ end }}
+    {{/* ── Pre-compute: flat labels list ─────────────────────────── */}}
+    {{ $allLabels := (.Subrequest "tasks").JSON.Array "#.labels|@flatten" }}
 
     <div style="display:flex;flex-direction:column;gap:10px">
 
@@ -121,14 +118,29 @@
       </div>
       {{ end }}
 
-      {{/* ── Labels / Tag cloud ───────────────────────────────────── */}}
-      {{ if $hasLabels }}
+      {{/* ── Labels / Tag cloud (top 5 unique, with count) ─────────── */}}
+      {{ if gt (len $allLabels) 0 }}
       <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
         <div class="size-h5" style="margin-bottom:6px">Labels</div>
         <div style="display:flex;flex-wrap:wrap;gap:4px">
-          {{ range $tasks }}
-            {{ range .Array "labels" }}
-            <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ .String "@this" }}</span>
+          {{ $shown := 0 }}
+          {{ range $i, $label := $allLabels }}
+            {{ if lt $shown 5 }}
+              {{ $str := $label.String "@this" }}
+              {{ $isFirst := true }}
+              {{ range $j, $prev := $allLabels }}
+                {{ if and $isFirst (lt $j $i) }}
+                  {{ if eq ($prev.String "@this") $str }}{{ $isFirst = false }}{{ end }}
+                {{ end }}
+              {{ end }}
+              {{ if $isFirst }}
+                {{ $count := 0 }}
+                {{ range $allLabels }}
+                  {{ if eq (.String "@this") $str }}{{ $count = add $count 1 }}{{ end }}
+                {{ end }}
+                <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $str }} ({{ $count }})</span>
+                {{ $shown = add $shown 1 }}
+              {{ end }}
             {{ end }}
           {{ end }}
         </div>
