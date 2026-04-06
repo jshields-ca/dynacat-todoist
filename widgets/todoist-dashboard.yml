@@ -58,7 +58,7 @@
       </div>
       {{ end }}
 
-      {{/* ── All-time completed (try multiple possible field names) ── */}}
+      {{/* ── All-time completed ───────────────────────────────────── */}}
       {{ if .JSON.Exists "completed_count" }}
       <div style="display:flex;align-items:center;justify-content:space-between">
         <span class="color-subdue size-h5">All-time completed</span>
@@ -88,37 +88,25 @@
       {{/* ── Projects with open task counts ──────────────────────── */}}
       {{ if gt (len $projects) 0 }}
       <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
-        <div class="color-subdue size-h5" style="margin-bottom:6px">
-          Projects <span style="opacity:0.6">({{ len $projects }})</span>
-        </div>
-        <ul class="list list-gap-10">
+        <span class="color-subdue size-h6">Projects ({{ len $projects }})</span>
+        <div style="display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:5px">
           {{ range $projects }}
           {{ $pid := .String "id" }}
           {{ $count := 0 }}
           {{ range $tasks }}
-            {{ if eq (.String "projectId") $pid }}{{ $count = add $count 1 }}{{ end }}
+            {{ if eq (.String "project_id") $pid }}{{ $count = add $count 1 }}{{ end }}
           {{ end }}
-          <li style="display:flex;align-items:center;justify-content:space-between">
-            <span class="size-h5">{{ .String "name" }}</span>
-            {{ if gt $count 0 }}
-              <span class="color-subdue size-h6"
-                    style="background:rgba(128,128,128,0.15);border-radius:10px;padding:1px 8px">
-                {{ $count }}
-              </span>
-            {{ else }}
-              <span class="color-subdue size-h6" style="opacity:0.35">0</span>
-            {{ end }}
-          </li>
+          <span class="size-h5">{{ .String "name" }}
+            <span class="color-subdue size-h6">({{ $count }})</span>
+          </span>
           {{ end }}
-        </ul>
+        </div>
       </div>
       {{ end }}
 
       {{/* ── Link to Todoist app ──────────────────────────────────── */}}
-      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
-        <a href="https://app.todoist.com" class="color-primary size-h5" target="_blank">
-          Open Todoist &#8599;
-        </a>
+      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15);display:flex;justify-content:flex-end">
+        <a href="https://app.todoist.com" class="color-primary size-h5" target="_blank">Open Todoist -&gt;</a>
       </div>
 
     </div>
