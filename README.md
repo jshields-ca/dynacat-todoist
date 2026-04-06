@@ -1,6 +1,6 @@
 # Todoist Dashboard
 
-A single consolidated `custom-api` widget for [Dynacat](https://github.com/Panonim/dynacat) that surfaces your Todoist productivity data at a glance:
+A single consolidated `custom-api` widget for [Dynacat](https://github.com/Panonim/dynacat) that displays your Todoist productivity data at a glance:
 
 - Karma score with trend indicator (↑ / ↓)
 - Tasks completed today vs. your daily goal
@@ -11,8 +11,6 @@ A single consolidated `custom-api` widget for [Dynacat](https://github.com/Panon
 - Quick link to open Todoist
 
 No extra server required — Dynacat fetches the Todoist API directly at render time.
-
-> **Note:** Streak data (current streak, best streak) is not exposed by Todoist API v1. It is only visible inside the Todoist app's Productivity section. If Todoist ever adds these fields to their API, the widget will display them automatically.
 
 ---
 
@@ -230,9 +228,6 @@ The widget defaults to `cache: 15m`. Adjust to suit your needs. Use `cache: 1s` 
 
 **Labels section not showing**
 - The section is hidden automatically when no open tasks have labels assigned.
-
-**Streaks not showing**
-- Streak data is not exposed by Todoist API v1. This is an API limitation, not a bug. See the note at the top of this README.
 
 **Per-project task counts not showing**
 - The `/tasks` endpoint does not return a `project_id` field that can be reliably matched against project IDs in Go templates. Projects are shown as name badges only.
