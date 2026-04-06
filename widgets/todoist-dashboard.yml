@@ -46,8 +46,11 @@
       {{ end }}
     {{ end }}
 
-    {{/* ── Pre-compute: flat labels list ─────────────────────────── */}}
-    {{ $allLabels := (.Subrequest "tasks").JSON.Array "#.labels|@flatten" }}
+    {{/* ── Pre-compute: does any task have labels? ────────────────── */}}
+    {{ $hasLabels := false }}
+    {{ range $tasks }}
+      {{ if gt (len (.Array "labels")) 0 }}{{ $hasLabels = true }}{{ end }}
+    {{ end }}
 
     <div style="display:flex;flex-direction:column;gap:10px">
 
@@ -119,27 +122,33 @@
       {{ end }}
 
       {{/* ── Labels / Tag cloud (top 5 unique, with count) ─────────── */}}
-      {{ if gt (len $allLabels) 0 }}
+      {{ if $hasLabels }}
       <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
         <div class="size-h5" style="margin-bottom:6px">Labels</div>
         <div style="display:flex;flex-wrap:wrap;gap:4px">
           {{ $shown := 0 }}
-          {{ range $i, $label := $allLabels }}
-            {{ if lt $shown 5 }}
-              {{ $str := $label.String "@this" }}
-              {{ $isFirst := true }}
-              {{ range $j, $prev := $allLabels }}
-                {{ if and $isFirst (lt $j $i) }}
-                  {{ if eq ($prev.String "@this") $str }}{{ $isFirst = false }}{{ end }}
+          {{ range $i, $curTask := $tasks }}
+            {{ range $curTask.Array "labels" }}
+              {{ $lbl := .String "@this" }}
+              {{ if lt $shown 5 }}
+                {{/* Check if label appeared in any task before index $i */}}
+                {{ $seenBefore := false }}
+                {{ range $j, $prevTask := $tasks }}
+                  {{ if and (not $seenBefore) (lt $j $i) }}
+                    {{ range $prevTask.Array "labels" }}
+                      {{ if eq (.String "@this") $lbl }}{{ $seenBefore = true }}{{ end }}
+                    {{ end }}
+                  {{ end }}
                 {{ end }}
-              {{ end }}
-              {{ if $isFirst }}
-                {{ $count := 0 }}
-                {{ range $allLabels }}
-                  {{ if eq (.String "@this") $str }}{{ $count = add $count 1 }}{{ end }}
+                {{ if not $seenBefore }}
+                  {{/* Count total occurrences across all tasks */}}
+                  {{ $count := 0 }}
+                  {{ range $tasks }}{{ range .Array "labels" }}
+                    {{ if eq (.String "@this") $lbl }}{{ $count = add $count 1 }}{{ end }}
+                  {{ end }}{{ end }}
+                  <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $lbl }} ({{ $count }})</span>
+                  {{ $shown = add $shown 1 }}
                 {{ end }}
-                <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $str }} ({{ $count }})</span>
-                {{ $shown = add $shown 1 }}
               {{ end }}
             {{ end }}
           {{ end }}
