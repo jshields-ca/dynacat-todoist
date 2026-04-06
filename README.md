@@ -13,10 +13,9 @@ A single `custom-api` widget that shows karma, streaks, task stats, priority bre
 | **Karma** | Current score with up/down trend indicator |
 | **Completed today** | Tasks done today vs. your daily goal |
 | **All-time completed** | Total tasks completed across all time |
-| **Current streak** | Active daily streak (if returned by API) |
-| **Longest streak** | Personal best streak (if returned by API) |
 | **Open tasks** | Total count with priority breakdown (urgent / high / medium / normal) |
-| **Projects** | All projects with open task count per project |
+| **Labels** | Tag cloud of all labels in use across open tasks |
+| **Projects** | All project names as compact badges, with total project count |
 | **Open Todoist** | Direct link to the Todoist app |
 
 ---
@@ -78,16 +77,9 @@ The widget defaults to `cache: 15m`. Change it to suit your needs. Use `cache: 1
      https://api.todoist.com/api/v1/user | python3 -m json.tool
    ```
 
-### Streak or all-time fields not showing
+### Streaks not showing
 
-These fields are conditionally displayed — the widget only shows them if the API returns them. To check what your account exposes:
-
-```bash
-curl -s -H "Authorization: Bearer YOUR_TOKEN" \
-  https://api.todoist.com/api/v1/user | python3 -m json.tool
-```
-
-Look for `streak_days`, `longest_streak`, `completed_count`, `karma_completed_count` in the output.
+Streak data (current streak, best streak) is **not exposed by Todoist API v1**. It is only visible inside the Todoist app under the Productivity section. If Todoist adds streak fields to the API in a future update, the widget will display them automatically since it uses `.Exists` guards.
 
 ---
 
