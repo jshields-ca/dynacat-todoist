@@ -31,7 +31,7 @@
           template: |
             {{ $name := .JSON.String "full_name" }}
             {{ $premium := .JSON.Bool "is_premium" }}
-            {{ $tasks := .Subrequest.tasks.JSON.Array "." }}
+            {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
             <div style="display:flex;flex-direction:column;gap:8px">
               <div>
                 <span class="size-h4 color-highlight">{{ $name }}</span>
@@ -75,7 +75,7 @@
                 Authorization: Bearer ${TODOIST_API_TOKEN}
           template: |
             {{ $projects := .JSON.Array "." }}
-            {{ $tasks := .Subrequest.tasks.JSON.Array "." }}
+            {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
             <ul class="list list-gap-10">
               {{ range $projects }}
               {{ $pid := .String "id" }}
