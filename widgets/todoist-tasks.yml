@@ -25,7 +25,7 @@
   headers:
     Authorization: Bearer ${TODOIST_API_TOKEN}
   template: |
-    {{ $tasks := .JSON.Array "results" }}
+    {{ $tasks := .JSON.Array "." }}
     {{ if eq (len $tasks) 0 }}
       <p class="color-subdue size-h5" style="padding:4px 0">Inbox zero — you're all caught up!</p>
     {{ else }}
@@ -34,13 +34,13 @@
       {{ $p := .Int "priority" }}
       <li style="display:flex;align-items:baseline;gap:6px">
         {{ if eq $p 4 }}
-          <span class="color-negative" title="Urgent" style="font-size:0.7em">&#9679;</span>
+          <span class="color-negative" title="Urgent">&#9679;</span>
         {{ else if eq $p 3 }}
-          <span class="color-highlight" title="High" style="font-size:0.7em">&#9679;</span>
+          <span class="color-highlight" title="High">&#9679;</span>
         {{ else if eq $p 2 }}
-          <span class="color-primary" title="Medium" style="font-size:0.7em">&#9679;</span>
+          <span class="color-primary" title="Medium">&#9679;</span>
         {{ else }}
-          <span class="color-subdue" title="Normal" style="font-size:0.7em">&#9675;</span>
+          <span class="color-subdue" title="Normal">&#9675;</span>
         {{ end }}
         <span>
           <a href="{{ .String "url" }}" class="color-primary-if-not-visited visited-indicator" target="_blank">{{ .String "content" }}</a>
@@ -68,7 +68,7 @@
 #     sorted_by: due_date
 #     sort_order: asc
 #   template: |
-#     {{ $tasks := .JSON.Array "results" }}
+#     {{ $tasks := .JSON.Array "." }}
 #     {{ if eq (len $tasks) 0 }}
 #       <p class="color-subdue size-h5" style="padding:4px 0">No tasks in this project.</p>
 #     {{ else }}
@@ -77,13 +77,13 @@
 #       {{ $p := .Int "priority" }}
 #       <li style="display:flex;align-items:baseline;gap:6px">
 #         {{ if eq $p 4 }}
-#           <span class="color-negative" title="Urgent" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-negative" title="Urgent">&#9679;</span>
 #         {{ else if eq $p 3 }}
-#           <span class="color-highlight" title="High" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-highlight" title="High">&#9679;</span>
 #         {{ else if eq $p 2 }}
-#           <span class="color-primary" title="Medium" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-primary" title="Medium">&#9679;</span>
 #         {{ else }}
-#           <span class="color-subdue" title="Normal" style="font-size:0.7em">&#9675;</span>
+#           <span class="color-subdue" title="Normal">&#9675;</span>
 #         {{ end }}
 #         <span>
 #           <a href="{{ .String "url" }}" class="color-primary-if-not-visited visited-indicator" target="_blank">{{ .String "content" }}</a>
@@ -109,7 +109,7 @@
 #     sorted_by: due_date
 #     sort_order: asc
 #   template: |
-#     {{ $tasks := .JSON.Array "results" }}
+#     {{ $tasks := .JSON.Array "." }}
 #     {{ if eq (len $tasks) 0 }}
 #       <p class="color-subdue size-h5" style="padding:4px 0">No tasks — inbox zero!</p>
 #     {{ else }}
@@ -118,13 +118,13 @@
 #       {{ $p := .Int "priority" }}
 #       <li style="display:flex;align-items:baseline;gap:6px;padding:4px 0">
 #         {{ if eq $p 4 }}
-#           <span class="color-negative" title="Urgent" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-negative" title="Urgent">&#9679;</span>
 #         {{ else if eq $p 3 }}
-#           <span class="color-highlight" title="High" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-highlight" title="High">&#9679;</span>
 #         {{ else if eq $p 2 }}
-#           <span class="color-primary" title="Medium" style="font-size:0.7em">&#9679;</span>
+#           <span class="color-primary" title="Medium">&#9679;</span>
 #         {{ else }}
-#           <span class="color-subdue" title="Normal" style="font-size:0.7em">&#9675;</span>
+#           <span class="color-subdue" title="Normal">&#9675;</span>
 #         {{ end }}
 #         <span>
 #           <a href="{{ .String "url" }}" class="color-primary-if-not-visited visited-indicator" target="_blank">{{ .String "content" }}</a>

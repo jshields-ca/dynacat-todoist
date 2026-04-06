@@ -29,7 +29,7 @@
               headers:
                 Authorization: Bearer ${TODOIST_API_TOKEN}
           template: |
-            {{ $tasks := (.Subrequest "tasks").JSON.Array "results" }}
+            {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
             <div style="display:flex;flex-direction:column;gap:8px">
               <div style="display:flex;align-items:center;gap:6px">
                 <span class="color-subdue size-h5">Open tasks</span>
@@ -69,7 +69,7 @@
                 Authorization: Bearer ${TODOIST_API_TOKEN}
           template: |
             {{ $projects := .JSON.Array "results" }}
-            {{ $tasks := (.Subrequest "tasks").JSON.Array "results" }}
+            {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
             <ul class="list list-gap-10">
               {{ range $projects }}
               {{ $pid := .String "id" }}
@@ -102,7 +102,7 @@
           headers:
             Authorization: Bearer ${TODOIST_API_TOKEN}
           template: |
-            {{ $tasks := .JSON.Array "results" }}
+            {{ $tasks := .JSON.Array "." }}
             {{ if eq (len $tasks) 0 }}
               <p class="color-positive size-h5" style="padding:4px 0">&#10003; Inbox zero!</p>
             {{ else }}
@@ -110,10 +110,10 @@
               {{ range $tasks }}
               {{ $p := .Int "priority" }}
               <li style="display:flex;align-items:baseline;gap:6px">
-                {{ if eq $p 4 }}<span class="color-negative" style="font-size:0.7em" title="Urgent">&#9679;</span>
-                {{ else if eq $p 3 }}<span class="color-highlight" style="font-size:0.7em" title="High">&#9679;</span>
-                {{ else if eq $p 2 }}<span class="color-primary" style="font-size:0.7em" title="Medium">&#9679;</span>
-                {{ else }}<span class="color-subdue" style="font-size:0.7em" title="Normal">&#9675;</span>
+                {{ if eq $p 4 }}<span class="color-negative" title="Urgent">&#9679;</span>
+                {{ else if eq $p 3 }}<span class="color-highlight" title="High">&#9679;</span>
+                {{ else if eq $p 2 }}<span class="color-primary" title="Medium">&#9679;</span>
+                {{ else }}<span class="color-subdue" title="Normal">&#9675;</span>
                 {{ end }}
                 <span>
                   <a href="{{ .String "url" }}" class="color-primary-if-not-visited visited-indicator" target="_blank">{{ .String "content" }}</a>
@@ -137,7 +137,7 @@
         #     sorted_by: due_date
         #     sort_order: asc
         #   template: |
-        #     {{ $tasks := .JSON.Array "results" }}
+        #     {{ $tasks := .JSON.Array "." }}
         #     {{ if eq (len $tasks) 0 }}
         #       <p class="color-subdue size-h5" style="padding:4px 0">No tasks.</p>
         #     {{ else }}
@@ -145,10 +145,10 @@
         #       {{ range $tasks }}
         #       {{ $p := .Int "priority" }}
         #       <li style="display:flex;align-items:baseline;gap:6px">
-        #         {{ if eq $p 4 }}<span class="color-negative" style="font-size:0.7em">&#9679;</span>
-        #         {{ else if eq $p 3 }}<span class="color-highlight" style="font-size:0.7em">&#9679;</span>
-        #         {{ else if eq $p 2 }}<span class="color-primary" style="font-size:0.7em">&#9679;</span>
-        #         {{ else }}<span class="color-subdue" style="font-size:0.7em">&#9675;</span>
+        #         {{ if eq $p 4 }}<span class="color-negative">&#9679;</span>
+        #         {{ else if eq $p 3 }}<span class="color-highlight">&#9679;</span>
+        #         {{ else if eq $p 2 }}<span class="color-primary">&#9679;</span>
+        #         {{ else }}<span class="color-subdue">&#9675;</span>
         #         {{ end }}
         #         <span>
         #           <a href="{{ .String "url" }}" class="color-primary-if-not-visited visited-indicator" target="_blank">{{ .String "content" }}</a>
