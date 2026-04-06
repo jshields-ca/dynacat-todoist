@@ -2,7 +2,7 @@
 
 Connect your Todoist productivity stats to your [Dynacat](https://github.com/Panonim/dynacat) self-hosted dashboard.
 
-A single `custom-api` widget that shows karma, streaks, task stats, priority breakdown, and projects — all in one place. No extra server required; Dynacat fetches the Todoist API directly.
+A single `custom-api` widget that shows karma, task stats, priority breakdown, labels, and projects — all in one place. No extra server required; Dynacat fetches the Todoist API directly.
 
 ---
 
