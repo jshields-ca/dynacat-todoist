@@ -25,7 +25,7 @@
         Authorization: Bearer ${TODOIST_API_TOKEN}
   template: |
     {{ $projects := .JSON.Array "." }}
-    {{ $tasks := .Subrequest.tasks.JSON.Array "." }}
+    {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
     {{ if eq (len $projects) 0 }}
       <p class="color-subdue size-h5" style="padding:4px 0">No projects found.</p>
     {{ else }}

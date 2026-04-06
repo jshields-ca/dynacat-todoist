@@ -34,7 +34,7 @@
     {{ $name := .JSON.String "full_name" }}
     {{ $email := .JSON.String "email" }}
     {{ $premium := .JSON.Bool "is_premium" }}
-    {{ $tasks := .Subrequest.tasks.JSON.Array "." }}
+    {{ $tasks := (.Subrequest "tasks").JSON.Array "." }}
 
     <div style="display:flex;flex-direction:column;gap:8px">
 
