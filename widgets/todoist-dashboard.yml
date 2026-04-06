@@ -1,0 +1,124 @@
+# Todoist Dashboard Widget for Dynacat
+#
+# Single consolidated widget showing karma, productivity stats, project
+# overview with task counts, streaks, and a link to the Todoist app.
+#
+# REQUIRED: Add to your Dynacat .env file:
+#   TODOIST_API_TOKEN=your_personal_api_token_here
+#
+# HOW TO GET YOUR API TOKEN:
+#   Todoist → Settings → Integrations → Developer → copy "API token"
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+- type: custom-api
+  title: Todoist
+  cache: 15m
+  url: https://api.todoist.com/api/v1/user
+  headers:
+    Authorization: Bearer ${TODOIST_API_TOKEN}
+  subrequests:
+    tasks:
+      url: https://api.todoist.com/api/v1/tasks
+      headers:
+        Authorization: Bearer ${TODOIST_API_TOKEN}
+    projects:
+      url: https://api.todoist.com/api/v1/projects
+      headers:
+        Authorization: Bearer ${TODOIST_API_TOKEN}
+  template: |
+    {{ $tasks    := (.Subrequest "tasks").JSON.Array "." }}
+    {{ $projects := (.Subrequest "projects").JSON.Array "results" }}
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+
+      {{/* ── Karma ────────────────────────────────────────────────── */}}
+      {{ if .JSON.Exists "karma" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">Karma</span>
+        <span>
+          <span class="color-highlight size-h4" style="font-weight:600">{{ .JSON.Int "karma" }}</span>
+          {{ if .JSON.Exists "karma_trend" }}
+            {{ $trend := .JSON.String "karma_trend" }}
+            {{ if eq $trend "up" }}<span class="color-positive size-h5">&nbsp;&#9650;</span>
+            {{ else if eq $trend "down" }}<span class="color-negative size-h5">&nbsp;&#9660;</span>
+            {{ end }}
+          {{ end }}
+        </span>
+      </div>
+      {{ end }}
+
+      {{/* ── Tasks completed today ────────────────────────────────── */}}
+      {{ if .JSON.Exists "completed_today" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">Completed today</span>
+        <span class="color-positive size-h4" style="font-weight:600">{{ .JSON.Int "completed_today" }}
+          {{ if .JSON.Exists "daily_goal" }}<span class="color-subdue size-h5">/ {{ .JSON.Int "daily_goal" }}</span>{{ end }}
+        </span>
+      </div>
+      {{ end }}
+
+      {{/* ── All-time completed (try multiple possible field names) ── */}}
+      {{ if .JSON.Exists "completed_count" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">All-time completed</span>
+        <span class="color-primary size-h5">{{ .JSON.Int "completed_count" }}</span>
+      </div>
+      {{ else if .JSON.Exists "karma_completed_count" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">All-time completed</span>
+        <span class="color-primary size-h5">{{ .JSON.Int "karma_completed_count" }}</span>
+      </div>
+      {{ end }}
+
+      {{/* ── Streaks ──────────────────────────────────────────────── */}}
+      {{ if .JSON.Exists "streak_days" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">Current streak</span>
+        <span class="color-highlight size-h5">{{ .JSON.Int "streak_days" }} days &#128293;</span>
+      </div>
+      {{ end }}
+      {{ if .JSON.Exists "longest_streak" }}
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="color-subdue size-h5">Longest streak</span>
+        <span class="color-primary size-h5">{{ .JSON.Int "longest_streak" }} days</span>
+      </div>
+      {{ end }}
+
+      {{/* ── Projects with open task counts ──────────────────────── */}}
+      {{ if gt (len $projects) 0 }}
+      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
+        <div class="color-subdue size-h5" style="margin-bottom:6px">
+          Projects <span style="opacity:0.6">({{ len $projects }})</span>
+        </div>
+        <ul class="list list-gap-10">
+          {{ range $projects }}
+          {{ $pid := .String "id" }}
+          {{ $count := 0 }}
+          {{ range $tasks }}
+            {{ if eq (.String "projectId") $pid }}{{ $count = add $count 1 }}{{ end }}
+          {{ end }}
+          <li style="display:flex;align-items:center;justify-content:space-between">
+            <span class="size-h5">{{ .String "name" }}</span>
+            {{ if gt $count 0 }}
+              <span class="color-subdue size-h6"
+                    style="background:rgba(128,128,128,0.15);border-radius:10px;padding:1px 8px">
+                {{ $count }}
+              </span>
+            {{ else }}
+              <span class="color-subdue size-h6" style="opacity:0.35">0</span>
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{/* ── Link to Todoist app ──────────────────────────────────── */}}
+      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
+        <a href="https://app.todoist.com" class="color-primary size-h5" target="_blank">
+          Open Todoist &#8599;
+        </a>
+      </div>
+
+    </div>
