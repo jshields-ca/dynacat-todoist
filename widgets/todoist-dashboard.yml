@@ -46,11 +46,29 @@
       {{ end }}
     {{ end }}
 
-    {{/* ── Pre-compute: does any task have labels? ────────────────── */}}
-    {{ $hasLabels := false }}
-    {{ range $tasks }}
-      {{ if gt (len (.Array "labels")) 0 }}{{ $hasLabels = true }}{{ end }}
-    {{ end }}
+    {{/* ── Pre-compute: top 5 labels by frequency (insertion sort) ── */}}
+    {{ $s1 := "" }}{{ $s2 := "" }}{{ $s3 := "" }}{{ $s4 := "" }}{{ $s5 := "" }}
+    {{ $c1 := 0 }}{{ $c2 := 0 }}{{ $c3 := 0 }}{{ $c4 := 0 }}{{ $c5 := 0 }}
+    {{ range $tasks }}{{ range .Array "labels" }}
+      {{ $lbl := .String "@this" }}
+      {{ if and (ne $lbl $s1) (ne $lbl $s2) (ne $lbl $s3) (ne $lbl $s4) (ne $lbl $s5) }}
+        {{ $count := 0 }}
+        {{ range $tasks }}{{ range .Array "labels" }}
+          {{ if eq (.String "@this") $lbl }}{{ $count = add $count 1 }}{{ end }}
+        {{ end }}{{ end }}
+        {{ if gt $count $c1 }}
+          {{ $s5 = $s4 }}{{ $c5 = $c4 }}{{ $s4 = $s3 }}{{ $c4 = $c3 }}{{ $s3 = $s2 }}{{ $c3 = $c2 }}{{ $s2 = $s1 }}{{ $c2 = $c1 }}{{ $s1 = $lbl }}{{ $c1 = $count }}
+        {{ else if gt $count $c2 }}
+          {{ $s5 = $s4 }}{{ $c5 = $c4 }}{{ $s4 = $s3 }}{{ $c4 = $c3 }}{{ $s3 = $s2 }}{{ $c3 = $c2 }}{{ $s2 = $lbl }}{{ $c2 = $count }}
+        {{ else if gt $count $c3 }}
+          {{ $s5 = $s4 }}{{ $c5 = $c4 }}{{ $s4 = $s3 }}{{ $c4 = $c3 }}{{ $s3 = $lbl }}{{ $c3 = $count }}
+        {{ else if gt $count $c4 }}
+          {{ $s5 = $s4 }}{{ $c5 = $c4 }}{{ $s4 = $lbl }}{{ $c4 = $count }}
+        {{ else if gt $count $c5 }}
+          {{ $s5 = $lbl }}{{ $c5 = $count }}
+        {{ end }}
+      {{ end }}
+    {{ end }}{{ end }}
 
     <div style="display:flex;flex-direction:column;gap:10px">
 
@@ -121,37 +139,16 @@
       </div>
       {{ end }}
 
-      {{/* ── Labels / Tag cloud (top 5 unique, with count) ─────────── */}}
-      {{ if $hasLabels }}
+      {{/* ── Labels / Tag cloud (top 5 by frequency) ──────────────── */}}
+      {{ if $s1 }}
       <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15)">
         <div class="size-h5" style="margin-bottom:6px">Labels</div>
         <div style="display:flex;flex-wrap:wrap;gap:4px">
-          {{ $shown := 0 }}
-          {{ range $i, $curTask := $tasks }}
-            {{ range $curTask.Array "labels" }}
-              {{ $lbl := .String "@this" }}
-              {{ if lt $shown 5 }}
-                {{/* Check if label appeared in any task before index $i */}}
-                {{ $seenBefore := false }}
-                {{ range $j, $prevTask := $tasks }}
-                  {{ if and (not $seenBefore) (lt $j $i) }}
-                    {{ range $prevTask.Array "labels" }}
-                      {{ if eq (.String "@this") $lbl }}{{ $seenBefore = true }}{{ end }}
-                    {{ end }}
-                  {{ end }}
-                {{ end }}
-                {{ if not $seenBefore }}
-                  {{/* Count total occurrences across all tasks */}}
-                  {{ $count := 0 }}
-                  {{ range $tasks }}{{ range .Array "labels" }}
-                    {{ if eq (.String "@this") $lbl }}{{ $count = add $count 1 }}{{ end }}
-                  {{ end }}{{ end }}
-                  <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $lbl }} ({{ $count }})</span>
-                  {{ $shown = add $shown 1 }}
-                {{ end }}
-              {{ end }}
-            {{ end }}
-          {{ end }}
+          <span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $s1 }} ({{ $c1 }})</span>
+          {{ if $s2 }}<span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $s2 }} ({{ $c2 }})</span>{{ end }}
+          {{ if $s3 }}<span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $s3 }} ({{ $c3 }})</span>{{ end }}
+          {{ if $s4 }}<span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $s4 }} ({{ $c4 }})</span>{{ end }}
+          {{ if $s5 }}<span class="size-h5" style="background:rgba(128,128,128,0.12);border-radius:4px;padding:1px 7px">{{ $s5 }} ({{ $c5 }})</span>{{ end }}
         </div>
       </div>
       {{ end }}
@@ -172,8 +169,8 @@
       {{ end }}
 
       {{/* ── Link to Todoist app ──────────────────────────────────── */}}
-      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15);display:flex;justify-content:flex-end">
-        <a href="https://app.todoist.com" class="color-primary size-h4" target="_blank">Open Todoist -&gt;</a>
+      <div style="padding-top:8px;border-top:1px solid rgba(128,128,128,0.15);text-align:right">
+        <a href="https://app.todoist.com" target="_blank" class="color-subdue size-h6" style="opacity:0.6;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">View Tasks on Todoist -&gt;</a>
       </div>
 
     </div>
