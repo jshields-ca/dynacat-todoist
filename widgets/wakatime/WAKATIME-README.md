@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
 [![WakaTime API](https://img.shields.io/badge/WakaTime-API-informational)](https://wakatime.com/developers)
 
-A [Dynacat](https://github.com/Panonim/dynacat)  widget that pulls from the [WakaTime API](https://wakatime.com/developers) and displays your coding metrics — total time, daily average, best day, top languages, and top projects — directly on your dashboard.
+A [Dynacat](https://github.com/Panonim/dynacat) widget that pulls from the [WakaTime API](https://wakatime.com/developers) and displays your coding metrics — total time, daily average, best day, top languages, and top projects — directly on your dashboard.
 
 ## Widget
 

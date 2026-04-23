@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
 [![ExchangeRate-API](https://img.shields.io/badge/ExchangeRate--API-v6-informational)](https://www.exchangerate-api.com)
 
-A [Dynacat](https://github.com/Panonim/dynacat) / [Glance](https://github.com/glanceapp/glance) widget that displays the current Canadian Dollar (CAD) exchange rate against USD and EUR, with a last-synced timestamp. This can be re-configured for any currency available in the Exchangerate-API. Refreshes once every 24 hours.
+A [Dynacat](https://github.com/Panonim/dynacat) that displays the current Canadian Dollar (CAD) exchange rate against USD and EUR, with a last-synced timestamp. This can be re-configured for any currency available in the Exchangerate-API. Refreshes once every 24 hours.
 
 ## What it shows
 
