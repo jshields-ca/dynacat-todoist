@@ -5,7 +5,7 @@
 [![Glance](https://img.shields.io/badge/Glance-compatible-blue)](https://github.com/glanceapp/glance)
 [![custom-api](https://img.shields.io/badge/type-custom--api-informational)](https://github.com/Panonim/dynacat)
 
-A collection of drop-in `custom-api` widgets for [Dynacat](https://github.com/Panonim/dynacat) (and [Glance](https://github.com/glanceapp/glance)). Paste a YAML block into your config and go — no extra server required.
+A collection of drop-in `custom-api` widgets for [Dynacat](https://github.com/Panonim/dynacat). Paste a YAML block into your config and go — no extra server required.
 
 See also the official community widget registry: [dynawidgets](https://github.com/Panonim/dynawidgets)
 
@@ -17,7 +17,7 @@ See also the official community widget registry: [dynawidgets](https://github.co
 |--------|-------------|--------|
 | [Todoist Dashboard](widgets/todoist/TODOIST-README.md) | Karma, daily productivity stats, open task count with P1–P4 breakdown, active projects, and top labels — all in one widget | [todoist-dashboard.yml](widgets/todoist/todoist-dashboard.yml) |
 | [WakaTime](widgets/wakatime/WAKATIME-README.md) | Weekly coding time, daily average, best day, top languages & projects | [wakatime-widget.yml](widgets/wakatime/wakatime-widget.yml) |
-| [CAD Exchange Rates](widgets/currency-exchange-rate/CURRENCY-EXCHANGE-RATE-README.md) | CAD → USD and EUR exchange rates with last-synced timestamp, updated daily | [currency-exchange-rate.yml](widgets/currency-exchange-rate/currency-exchange-rate.yml) |
+| [Currency Exchange Rates](widgets/currency-exchange-rate/CURRENCY-EXCHANGE-RATE-README.md) | CAD → USD and EUR exchange rates with last-synced timestamp, updated daily, can be configured to any currency | [currency-exchange-rate.yml](widgets/currency-exchange-rate/currency-exchange-rate.yml) |
 
 ---
 
