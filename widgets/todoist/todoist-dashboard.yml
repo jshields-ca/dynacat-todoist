@@ -1,6 +1,7 @@
 - type: custom-api
   title: Todoist
-  cache: 15m
+  title-icon: di:todoist
+  cache: 10m
   url: https://api.todoist.com/api/v1/user
   headers:
     Authorization: Bearer ${TODOIST_API_TOKEN}
